@@ -11,12 +11,18 @@ pub(crate) enum Race {
     Green,
     Blue,
     Yellow,
-    Pink,
+    Violet,
 }
 
 impl Race {
     pub fn all() -> [Self; 5] {
-        [Self::Red, Self::Green, Self::Blue, Self::Yellow, Self::Pink]
+        [
+            Self::Red,
+            Self::Green,
+            Self::Blue,
+            Self::Yellow,
+            Self::Violet,
+        ]
     }
 }
 
@@ -27,7 +33,7 @@ impl Display for Race {
             Race::Green => "green",
             Race::Blue => "blue",
             Race::Yellow => "yellow",
-            Race::Pink => "pink",
+            Race::Violet => "violet",
         };
         write!(f, "{str}")
     }
@@ -40,7 +46,7 @@ impl From<&Race> for usize {
             Race::Green => 1,
             Race::Blue => 2,
             Race::Yellow => 3,
-            Race::Pink => 4,
+            Race::Violet => 4,
         }
     }
 }
@@ -48,11 +54,11 @@ impl From<&Race> for usize {
 impl From<Race> for Color {
     fn from(value: Race) -> Self {
         match value {
-            Race::Red => Color::RED,
+            Race::Red => Color::CRIMSON,
             Race::Green => Color::DARK_GREEN,
             Race::Blue => Color::BLUE,
             Race::Yellow => Color::YELLOW,
-            Race::Pink => Color::PINK,
+            Race::Violet => Color::VIOLET,
         }
     }
 }

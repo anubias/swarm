@@ -43,31 +43,31 @@ fn system_setup(
     forces.set_force(&Race::Red, &Race::Green, ATTRACTION);
     forces.set_force(&Race::Red, &Race::Blue, INDIFERENCE);
     forces.set_force(&Race::Red, &Race::Yellow, INDIFERENCE);
-    forces.set_force(&Race::Red, &Race::Pink, REPULSION);
+    forces.set_force(&Race::Red, &Race::Violet, REPULSION);
 
     forces.set_force(&Race::Green, &Race::Red, REPULSION);
     forces.set_force(&Race::Green, &Race::Green, CONGREGATION);
     forces.set_force(&Race::Green, &Race::Blue, ATTRACTION);
     forces.set_force(&Race::Green, &Race::Yellow, INDIFERENCE);
-    forces.set_force(&Race::Green, &Race::Pink, INDIFERENCE);
+    forces.set_force(&Race::Green, &Race::Violet, INDIFERENCE);
 
     forces.set_force(&Race::Blue, &Race::Red, INDIFERENCE);
     forces.set_force(&Race::Blue, &Race::Green, REPULSION);
     forces.set_force(&Race::Blue, &Race::Blue, CONGREGATION);
     forces.set_force(&Race::Blue, &Race::Yellow, ATTRACTION);
-    forces.set_force(&Race::Blue, &Race::Pink, INDIFERENCE);
+    forces.set_force(&Race::Blue, &Race::Violet, INDIFERENCE);
 
     forces.set_force(&Race::Yellow, &Race::Red, INDIFERENCE);
     forces.set_force(&Race::Yellow, &Race::Green, INDIFERENCE);
     forces.set_force(&Race::Yellow, &Race::Blue, REPULSION);
     forces.set_force(&Race::Yellow, &Race::Yellow, CONGREGATION);
-    forces.set_force(&Race::Yellow, &Race::Pink, ATTRACTION);
+    forces.set_force(&Race::Yellow, &Race::Violet, ATTRACTION);
 
-    forces.set_force(&Race::Pink, &Race::Red, ATTRACTION);
-    forces.set_force(&Race::Pink, &Race::Green, INDIFERENCE);
-    forces.set_force(&Race::Pink, &Race::Blue, INDIFERENCE);
-    forces.set_force(&Race::Pink, &Race::Yellow, REPULSION);
-    forces.set_force(&Race::Pink, &Race::Pink, CONGREGATION);
+    forces.set_force(&Race::Violet, &Race::Red, ATTRACTION);
+    forces.set_force(&Race::Violet, &Race::Green, INDIFERENCE);
+    forces.set_force(&Race::Violet, &Race::Blue, INDIFERENCE);
+    forces.set_force(&Race::Violet, &Race::Yellow, REPULSION);
+    forces.set_force(&Race::Violet, &Race::Violet, CONGREGATION);
 
     commands.insert_resource(forces);
     generate_background(&mut commands, &mut meshes, &mut materials);
@@ -181,7 +181,7 @@ fn generate_background(
     let shape = Mesh2dHandle(meshes.add(Rectangle::new(DISTRIBUTION_SIZE, DISTRIBUTION_SIZE)));
     commands.spawn(MaterialMesh2dBundle {
         mesh: shape,
-        material: materials.add(Color::BLACK),
+        material: materials.add(Color::rgb(0.125, 0.125, 0.125)),
         transform: Transform::from_xyz(0.0, 0.0, 0.0),
         ..default()
     });
