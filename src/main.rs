@@ -20,8 +20,8 @@ const VISCOSITY_FACTOR: f32 = 0.999975;
 
 const ATTRACTION: f32 = 0.2;
 const REPULSION: f32 = -ATTRACTION / 5.0;
-const INDIFERENCE: f32 = ATTRACTION / 10.0;
-const CONGREGATION: f32 = -INDIFERENCE * 5.0;
+const INDIFFERENCE: f32 = ATTRACTION / 10.0;
+const CONGREGATION: f32 = -INDIFFERENCE * 5.0;
 
 fn main() {
     App::new()
@@ -41,31 +41,31 @@ fn system_setup(
     let mut forces = Forces::new();
     forces.set_force(&Race::Red, &Race::Red, CONGREGATION);
     forces.set_force(&Race::Red, &Race::Green, ATTRACTION);
-    forces.set_force(&Race::Red, &Race::Blue, INDIFERENCE);
-    forces.set_force(&Race::Red, &Race::Yellow, INDIFERENCE);
+    forces.set_force(&Race::Red, &Race::Blue, INDIFFERENCE);
+    forces.set_force(&Race::Red, &Race::Yellow, INDIFFERENCE);
     forces.set_force(&Race::Red, &Race::Violet, REPULSION);
 
     forces.set_force(&Race::Green, &Race::Red, REPULSION);
     forces.set_force(&Race::Green, &Race::Green, CONGREGATION);
     forces.set_force(&Race::Green, &Race::Blue, ATTRACTION);
-    forces.set_force(&Race::Green, &Race::Yellow, INDIFERENCE);
-    forces.set_force(&Race::Green, &Race::Violet, INDIFERENCE);
+    forces.set_force(&Race::Green, &Race::Yellow, INDIFFERENCE);
+    forces.set_force(&Race::Green, &Race::Violet, INDIFFERENCE);
 
-    forces.set_force(&Race::Blue, &Race::Red, INDIFERENCE);
+    forces.set_force(&Race::Blue, &Race::Red, INDIFFERENCE);
     forces.set_force(&Race::Blue, &Race::Green, REPULSION);
     forces.set_force(&Race::Blue, &Race::Blue, CONGREGATION);
     forces.set_force(&Race::Blue, &Race::Yellow, ATTRACTION);
-    forces.set_force(&Race::Blue, &Race::Violet, INDIFERENCE);
+    forces.set_force(&Race::Blue, &Race::Violet, INDIFFERENCE);
 
-    forces.set_force(&Race::Yellow, &Race::Red, INDIFERENCE);
-    forces.set_force(&Race::Yellow, &Race::Green, INDIFERENCE);
+    forces.set_force(&Race::Yellow, &Race::Red, INDIFFERENCE);
+    forces.set_force(&Race::Yellow, &Race::Green, INDIFFERENCE);
     forces.set_force(&Race::Yellow, &Race::Blue, REPULSION);
     forces.set_force(&Race::Yellow, &Race::Yellow, CONGREGATION);
     forces.set_force(&Race::Yellow, &Race::Violet, ATTRACTION);
 
     forces.set_force(&Race::Violet, &Race::Red, ATTRACTION);
-    forces.set_force(&Race::Violet, &Race::Green, INDIFERENCE);
-    forces.set_force(&Race::Violet, &Race::Blue, INDIFERENCE);
+    forces.set_force(&Race::Violet, &Race::Green, INDIFFERENCE);
+    forces.set_force(&Race::Violet, &Race::Blue, INDIFFERENCE);
     forces.set_force(&Race::Violet, &Race::Yellow, REPULSION);
     forces.set_force(&Race::Violet, &Race::Violet, CONGREGATION);
 
@@ -130,8 +130,8 @@ fn update_translation(
     if delta_t > 0.0 {
         let mut force_x = 0.0;
         let mut force_y = 0.0;
-        let mut margin_repulstion_x = 1.0;
-        let mut margin_repulstion_y = 1.0;
+        let mut margin_repulsion_x = 1.0;
+        let mut margin_repulsion_y = 1.0;
         let dx = reference.translation.x - target_transform.translation.x;
         let dy = reference.translation.y - target_transform.translation.y;
         let dist = (dx * dx + dy * dy).sqrt();
@@ -140,17 +140,17 @@ fn update_translation(
         let margin_dy = MARGIN - target_position.y.abs();
 
         if margin_dx < MARGIN_WIDTH {
-            margin_repulstion_x = 2.0 * force_factor / margin_dx;
+            margin_repulsion_x = 2.0 * force_factor / margin_dx;
         }
         if margin_dy < MARGIN_WIDTH {
-            margin_repulstion_y = 2.0 * force_factor / margin_dy;
+            margin_repulsion_y = 2.0 * force_factor / margin_dy;
         }
 
         if dist < INFLUENCE_RANGE {
             let force = force_factor / dist;
 
-            force_x = dx.signum() * force * margin_repulstion_x * dx.abs();
-            force_y = dy.signum() * force * margin_repulstion_y * dy.abs();
+            force_x = dx.signum() * force * margin_repulsion_x * dx.abs();
+            force_y = dy.signum() * force * margin_repulsion_y * dy.abs();
         }
 
         target_position.x =
