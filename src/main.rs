@@ -1,10 +1,7 @@
 mod types;
 
-use bevy::{
-    prelude::*,
-    sprite::{MaterialMesh2dBundle, Mesh2dHandle},
-};
-use rand::{rngs::ThreadRng, Rng};
+use bevy::prelude::*;
+use rand::Rng;
 
 use crate::types::*;
 
@@ -36,7 +33,7 @@ fn system_setup(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2d::default());
 
     let mut forces = Forces::new();
     forces.set_force(&Race::Red, &Race::Red, CONGREGATION);
@@ -79,7 +76,7 @@ fn system_animate(
     forces: Res<Forces>,
     mut target_drones: Query<(&Race, &mut Position2D, &mut Velocity2D, &mut Transform)>,
 ) {
-    let delta_t = time.delta_seconds();
+    let delta_t = time.delta_secs();
     let delta_t_sqr = delta_t * delta_t;
     let mut combinations = target_drones.iter_combinations_mut();
 
@@ -178,13 +175,11 @@ fn generate_background(
     meshes: &mut ResMut<Assets<Mesh>>,
     materials: &mut ResMut<Assets<ColorMaterial>>,
 ) {
-    let shape = Mesh2dHandle(meshes.add(Rectangle::new(DISTRIBUTION_SIZE, DISTRIBUTION_SIZE)));
-    commands.spawn(MaterialMesh2dBundle {
-        mesh: shape,
-        material: materials.add(Color::rgb(0.125, 0.125, 0.125)),
-        transform: Transform::from_xyz(0.0, 0.0, 0.0),
-        ..default()
-    });
+    commands.spawn((
+        Mesh2d(meshes.add(Rectangle::new(DISTRIBUTION_SIZE, DISTRIBUTION_SIZE))),
+        MeshMaterial2d(materials.add(Color::srgb(0.125, 0.125, 0.125))),
+        Transform::from_xyz(0.0, 0.0, 0.0),
+    ));
 }
 
 fn generate_swarm(
@@ -197,30 +192,20 @@ fn generate_swarm(
 
     for _ in 0..count {
         for race in Race::all() {
-            let (shape, position) = create_mesh(meshes, &mut rng);
+            let x = DISTRIBUTION_SIZE * rng.random::<f32>() - MARGIN - PIXEL_THICKNESS;
+            let y = DISTRIBUTION_SIZE * rng.random::<f32>() - MARGIN - PIXEL_THICKNESS;
             let z = 1.0 + Race::all().len() as f32 * rng.random::<f32>();
+            let position = Position2D { x, y };
             commands.spawn((
-                MaterialMesh2dBundle {
-                    mesh: shape,
-                    material: materials.add(Color::from(race.clone())),
-                    transform: Transform::from_xyz(position.x, position.y, z),
-                    ..default()
-                },
+                (
+                    Mesh2d(meshes.add(Circle::new(PIXEL_THICKNESS))),
+                    MeshMaterial2d(materials.add(Color::from(race.clone()))),
+                    Transform::from_xyz(position.x, position.y, z),
+                ),
                 race,
                 position,
                 Velocity2D { x: 0.0, y: 0.0 },
             ));
         }
     }
-}
-
-fn create_mesh(
-    meshes: &mut ResMut<Assets<Mesh>>,
-    rng: &mut ThreadRng,
-) -> (Mesh2dHandle, Position2D) {
-    let shape = Mesh2dHandle(meshes.add(Circle::new(PIXEL_THICKNESS)));
-    let x = DISTRIBUTION_SIZE * rng.random::<f32>() - MARGIN - PIXEL_THICKNESS;
-    let y = DISTRIBUTION_SIZE * rng.random::<f32>() - MARGIN - PIXEL_THICKNESS;
-
-    (shape, Position2D { x, y })
 }

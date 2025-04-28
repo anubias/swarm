@@ -1,8 +1,9 @@
 use std::fmt::Display;
 
 use bevy::{
-    ecs::{component::Component, system::Resource},
-    render::color::Color,
+    color::palettes::css::{BLUE, CRIMSON, DARK_GREEN, DEEP_PINK, YELLOW},
+    ecs::{component::Component, resource::Resource},
+    prelude::Color,
 };
 
 #[derive(Component, Clone)]
@@ -54,11 +55,11 @@ impl From<&Race> for usize {
 impl From<Race> for Color {
     fn from(value: Race) -> Self {
         match value {
-            Race::Red => Color::CRIMSON,
-            Race::Green => Color::DARK_GREEN,
-            Race::Blue => Color::BLUE,
-            Race::Yellow => Color::YELLOW,
-            Race::Violet => Color::VIOLET,
+            Race::Red => CRIMSON.into(),
+            Race::Green => DARK_GREEN.into(),
+            Race::Blue => BLUE.into(),
+            Race::Yellow => YELLOW.into(),
+            Race::Violet => DEEP_PINK.into(),
         }
     }
 }
