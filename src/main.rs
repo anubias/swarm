@@ -193,12 +193,12 @@ fn generate_swarm(
     materials: &mut ResMut<Assets<ColorMaterial>>,
     count: usize,
 ) {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
 
     for _ in 0..count {
         for race in Race::all() {
             let (shape, position) = create_mesh(meshes, &mut rng);
-            let z = 1.0 + Race::all().len() as f32 * rng.gen::<f32>();
+            let z = 1.0 + Race::all().len() as f32 * rng.random::<f32>();
             commands.spawn((
                 MaterialMesh2dBundle {
                     mesh: shape,
@@ -219,8 +219,8 @@ fn create_mesh(
     rng: &mut ThreadRng,
 ) -> (Mesh2dHandle, Position2D) {
     let shape = Mesh2dHandle(meshes.add(Circle::new(PIXEL_THICKNESS)));
-    let x = DISTRIBUTION_SIZE * rng.gen::<f32>() - MARGIN - PIXEL_THICKNESS;
-    let y = DISTRIBUTION_SIZE * rng.gen::<f32>() - MARGIN - PIXEL_THICKNESS;
+    let x = DISTRIBUTION_SIZE * rng.random::<f32>() - MARGIN - PIXEL_THICKNESS;
+    let y = DISTRIBUTION_SIZE * rng.random::<f32>() - MARGIN - PIXEL_THICKNESS;
 
     (shape, Position2D { x, y })
 }
