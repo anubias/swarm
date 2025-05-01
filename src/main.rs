@@ -1,13 +1,20 @@
 mod types;
 
-use bevy::prelude::*;
+use bevy::{
+    prelude::*,
+    render::{
+        settings::{Backends, WgpuSettings},
+        RenderPlugin,
+    },
+};
 use rand::Rng;
 
 use crate::types::*;
 
 const MEMBER_COUNT: usize = 256;
 const PIXEL_THICKNESS: f32 = 3.0;
-const DISTRIBUTION_SIZE: f32 = 640.0;
+const DISTRIBUTION_SIZE: f32 = 960.0;
+const WINDOW_SIZE: f32 = 1000.0;
 
 const MARGIN: f32 = DISTRIBUTION_SIZE / 2.0;
 const MARGIN_WIDTH: f32 = DISTRIBUTION_SIZE / 32.0;
@@ -22,13 +29,26 @@ const CONGREGATION: f32 = -INDIFFERENCE * 5.0;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins.set(RenderPlugin {
-            render_creation: bevy::render::settings::RenderCreation::Automatic(WgpuSettings {
-                backends: Some(Backends::VULKAN),
-                ..default()
-            }),
-            ..default()
-        }))
+        .add_plugins(
+            DefaultPlugins
+                .set(RenderPlugin {
+                    render_creation: bevy::render::settings::RenderCreation::Automatic(
+                        WgpuSettings {
+                            backends: Some(Backends::VULKAN),
+                            ..default()
+                        },
+                    ),
+                    ..default()
+                })
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        title: "Swarm".to_string(),
+                        resolution: (WINDOW_SIZE, WINDOW_SIZE).into(),
+                        ..default()
+                    }),
+                    ..default()
+                }),
+        )
         .add_systems(Startup, system_setup)
         .add_systems(Update, (system_animate, system_copy))
         .run();
