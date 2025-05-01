@@ -22,7 +22,13 @@ const CONGREGATION: f32 = -INDIFFERENCE * 5.0;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(RenderPlugin {
+            render_creation: bevy::render::settings::RenderCreation::Automatic(WgpuSettings {
+                backends: Some(Backends::VULKAN),
+                ..default()
+            }),
+            ..default()
+        }))
         .add_systems(Startup, system_setup)
         .add_systems(Update, (system_animate, system_copy))
         .run();
